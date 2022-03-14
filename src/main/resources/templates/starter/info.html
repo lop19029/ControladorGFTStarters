@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+
+<div layout:fragment="content">
+    <div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <p class="text-primary">Informações sobre o Starter</p>
+        </div>
+        <div class="card-body">
+            <form th:object="${starter}">
+                <input type="hidden" th:field="*{id}">
+                <div style="display: flex">
+                    <div>
+                        <img style="max-width: 200px; " th:src="${starter.getFotoPath}" class="rounded" alt="Foto de perfil">
+                    </div>
+                    <div class="ms-3 mt-3">
+                        <h1 th:text="*{nome + ' ' + sobrenome}"></h1>
+                        <h4 th:text="*{quatroLetras}"></h4>
+                        <p th:text="*{grupo.programaStart.nome}"></p>
+                        <p th:text="*{'Grupo ' + grupo.id + ' - ' + grupo.tecnologia.nome}"></p>
+                    </div>
+                </div>
+                <div class="form-group mb-3 mt-3">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                        Projetos
+                    </button>
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                        Dailies
+                    </button>
+                    <div class="collapse" id="collapse1">
+                        <div class="card card-body mt-3">
+                            <div th:if="${#lists.size(starter.projetos) == 0}">
+                                <p>Não tem nenhum projeto ainda.</p>
+                            </div>
+                            <div th:if="${#lists.size(starter.projetos) > 0}">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Etapa</th>
+                                        <th>Modulo</th>
+                                        <th>Avaliação</th>
+                                        <th>Comentarios</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="projeto : ${starter.projetos}">
+                                        <td th:text="${projeto.etapa}"></td>
+                                        <td th:text="${projeto.modulo.nome}"></td>
+                                        <td th:text="${projeto.avaliacao}"></td>
+                                        <td th:text="${projeto.comentarios}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapse" id="collapse2">
+                        <div class="card card-body mt-3">
+                            <div th:if="${#lists.size(starter.dailies) == 0}">
+                                <p>Não tem nenhuma daily ainda.</p>
+                            </div>
+                            <div th:if="${#lists.size(starter.dailies) > 0}">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Modulo</th>
+                                        <th>Opções</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="daily : ${starter.dailies}">
+                                        <td th:text="${#dates.format(daily.data, 'dd-MM-yyyy')}"></td>
+                                        <td th:text="${daily.modulo.nome}"></td>
+                                        <td><div class="btn-group mb-3">
+                                            <a class=" btn btn-outline-primary btn-sm text-decoration-none" th:href="@{/daily/info(id=${daily.id})}" role="button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-lg" viewBox="0 0 16 16">
+                                                    <path d="m9.708 6.075-3.024.379-.108.502.595.108c.387.093.464.232.38.619l-.975 4.577c-.255 1.183.14 1.74 1.067 1.74.72 0 1.554-.332 1.933-.789l.116-.549c-.263.232-.65.325-.905.325-.363 0-.494-.255-.402-.704l1.323-6.208Zm.091-2.755a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0Z"/>
+                                                </svg></a>
+                                        </div></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <a class="btn-primary btn-sm mt-3"th:href="@{/admin/starter/editar(id=${starter.id})}">Editar</a>
+        </div>
+
+    </div>
+</div>
+</html>
